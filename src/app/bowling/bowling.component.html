@@ -1,0 +1,16 @@
+<div class="container pt-3">
+    <div class="row">
+        <bowling-frame class="col p-0" *ngFor="let frame of currentGame?.frames; index as i;" [frame]="frame" [frameIndex]="i"></bowling-frame>
+    </div>
+    <div class="row mt-3 ">
+        <div class="col-1" *ngFor="let i of pinsRemainingButtons">
+            <button class="btn btn-primary"  (click)="roll(i)">{{i}}</button>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col">
+            <button class="btn btn-danger" (click)="reset()">Reset</button>
+        </div>
+    </div>
+</div>

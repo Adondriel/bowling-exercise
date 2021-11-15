@@ -1,0 +1,17 @@
+<div class="outline">
+    <div class="row p-0 m-0">
+        <div class="col p-0">
+            {{frame && frame.rolls[0] >= 0 ? frame.rolls[0] : '0'}}
+        </div>
+        <div class="col outline p-0">
+            {{frame && frame.rolls[1] >= 0 ? frame.rolls[1] : '0'}}
+        </div>
+        <div class="col outline p-0" *ngIf="frameIndex === 9">
+            {{frame && frame.rolls[2] >= 0 ? frame.rolls[2] : '0'}}
+    </div>
+    <div class="row p-0 m-0 justify-text-center">
+        <div class="col p-0">
+            {{frame && frame.scoreTotal >= 0 ? frame.scoreTotal : '0'}}
+        </div>
+    </div>
+</div>
