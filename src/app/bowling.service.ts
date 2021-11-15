@@ -34,19 +34,25 @@ export class BowlingService {
 
   getPinsRemaining() {
     let frame = this.currentGame.frames[this.currentFrameIndex];
+    // if we are outside the max number of frames, you can't roll anymore.
     if (this.currentFrameIndex > 9) {
       return 0;
     }
+    // if there are 0 rolls, then we have 10 pins remaining.
     if (this.getCurrentFrameRollCount() === 0) {
       return 10;
     }
+    // custom logic for last frame.
+    // if we are in the last frame
     if (this.currentFrameIndex === 9) {
+      // if there is already 1 roll.
       if (this.getCurrentFrameRollCount() === 1) {
         if (frame.isStrike) {
           return 10;
         } else {
           return 10 - frame.rolls[0];
         }
+        // if there are 2 rolls.
       } else if (this.getCurrentFrameRollCount() === 2) {
         if (frame.rolls[1] === 10) {
           return 10;
@@ -61,6 +67,7 @@ export class BowlingService {
     }
   }
 
+  // add a roll to the current frame, and update the scores.
   addRoll(pins: number) {
     if (this.currentFrameIndex < 10) {
       let frame = this.currentGame.frames[this.currentFrameIndex];
@@ -70,16 +77,15 @@ export class BowlingService {
       }
       frame.rolls.push(pins);
       this.updateScores();
-      // console.log('frame roll count', this.getCurrentFrameRollCount());
-      // console.log('max rolls', maxRolls);
+
       if (this.getCurrentFrameRollCount() >= maxRolls) {
         this.currentFrameIndex++;
       }
     }
-    // console.log('currentFrameIndex', this.currentFrameIndex);
     return this.currentGame;
   }
 
+  // used internally to calculate remaining pins.
   private getPinsDown() {
     let frame = this.currentGame.frames[this.currentFrameIndex];
     if (frame.rolls.length > 1) {
@@ -89,6 +95,7 @@ export class BowlingService {
     }
   }
 
+  // start a new, empty frame.
   private startNewFrame() {
     this.currentGame.frames.push({
       rolls: [],
@@ -99,14 +106,15 @@ export class BowlingService {
     });
   }
 
+  // update the scores for all frames.
   private updateScores() {
     for (let i = 0; i < 10; i++) {
       this.currentGame.frames[i].score = this.calculateFrameScore(i);
       this.currentGame.frames[i].scoreTotal = this.calculateFrameTotalScore(i);
     }
-    // console.info('frames', this.currentGame.frames);
   }
 
+  // Calculate the total running score for a frame
   private calculateFrameTotalScore(frameIndex: number) {
     let frame = this.currentGame.frames[frameIndex];
     if (frameIndex > 0) {
@@ -116,6 +124,7 @@ export class BowlingService {
     }
   }
 
+  // Calculate the score for a frame
   private calculateFrameScore(frameIndex: number) {
     let frame = this.currentGame.frames[frameIndex];
 
@@ -137,6 +146,7 @@ export class BowlingService {
     }
   }
 
+  // Calculate the total score for a frame
   private calculateFrameTotal(frameIndex: number) {
     let frame = this.currentGame.frames[frameIndex];
     if (frame.rolls.length > 1) {
@@ -146,10 +156,12 @@ export class BowlingService {
     }
   }
 
+  // Calculate the bonus for a spare
   private calculateSpareBonus(frameIndex: number) {
     return this.currentGame.frames[frameIndex + 1].rolls[0];
   }
 
+  // Calculate the bonus for a strike
   // This method is not called for the last frame.
   private calculateStrikeBonus(frameIndex: number) {
     let bonus = 0;
